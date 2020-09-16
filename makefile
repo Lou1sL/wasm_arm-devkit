@@ -2,20 +2,25 @@
 APP_NAME  = app
 SRC_DIR = .
 BUILD_DIR = ./build
-COMPILER_DIR = /opt/devkitpro/devkitARM
+COMPILER_DIR = /home/wasm_arm-gcc
 
 CC      = "$(COMPILER_DIR)/bin/arm-none-eabi-g++"
 ASM     = "$(COMPILER_DIR)/bin/arm-none-eabi-as"
 LINK    = "$(COMPILER_DIR)/bin/arm-none-eabi-g++"
 OBJCOPY = "$(COMPILER_DIR)/bin/arm-none-eabi-objcopy"
 
-CCFLAGS = -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -ffast-math -mthumb-interwork \
-	-mlong-calls -ffunction-sections \
-	-fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti \
+CCFLAGS = --specs=nosys.specs -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork -ffast-math \
+	-mlong-calls \
+	-ffunction-sections -fno-omit-frame-pointer\
+	-fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -nostdlib\
 	-ffreestanding \
 	-Wall -DNDEBUG -O3 -c -o $@
+
 ASMFLAGS = -mcpu=arm7tdmi -mthumb-interwork -o $@
-LINKFLAGS = -T $(SRC_DIR)/linker.ld -o $(BUILD_DIR)/$(APP_NAME).elf -Wl,-Map,$(BUILD_DIR)/$(APP_NAME).map,--cref -lm
+
+LINKFLAGS = --specs=nosys.specs \
+	-O3 -T $(SRC_DIR)/linker.ld -o $(BUILD_DIR)/$(APP_NAME).elf -Wl,-Map,$(BUILD_DIR)/$(APP_NAME).map,--cref -lm
+
 
 all: $(BUILD_DIR)/$(APP_NAME).hex
 

@@ -9,27 +9,27 @@
     .equ    ABT,   0b00010111
     .equ    UND,   0b00011011
     .equ    SYS,   0b00011111
-    .equ    STACK_FILL, 0xEFBEADDE /* 0xDEADBEEF */
+    .equ    STACK_FILL, 0xCCCCCCCC
 
 	.text
 	.code 32
-	.global _start
-	.func   _start
-_start:
+	.global _bootloader
+	.func   _bootloader
+_bootloader:
 	/* Exception Vector */
-	b _startup /* RST */
-	b .        /* UND */
-	b .        /* SWI */
-	b .        /* PFA */
-	b .        /* DTA */
-	b .        /* --- */
-	b .        /* IRQ */
-	b .        /* FIQ */
+	b _warm_init /* RST */
+	b .          /* UND */
+	b .          /* SWI */
+	b .          /* PFA */
+	b .          /* DTA */
+	b .          /* --- */
+	b .          /* IRQ */
+	b .          /* FIQ */
 
 	.string "2020 ryubai.com by RyuBAI for WASM_ARM platform."
 	.align 4
 
-_startup:
+_warm_init:
 	/* Relocate .data */
 	ldr r0, =__data_load
 	ldr r1, =__data_start
@@ -84,7 +84,7 @@ _startup:
 
 	swi 0xffffff
 
-	.size _start, . - _start
+	.size _bootloader, . - _bootloader
 	.endfunc
 
 	.end

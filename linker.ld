@@ -1,8 +1,8 @@
 OUTPUT_FORMAT("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
-ENTRY(_start)
+ENTRY(_bootloader)
 
-MEMORY { RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 128k }
+MEMORY { RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 256k }
 
 SECTIONS {
     .reset : {
@@ -92,4 +92,7 @@ SECTIONS {
     __end = . ;
     __end__ = . ;
     PROVIDE(end = .);
+
+    .stab 0 (NOLOAD) : { *(.stab) }
+    .stabstr 0 (NOLOAD) : { *(.stabstr) }
 }
