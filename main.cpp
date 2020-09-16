@@ -1,7 +1,15 @@
 #include "main.h"
 
 int main(void){
-    char str[] = "\n0\n123456789ABCDEF\n";
+    char str[] = 
+        "^__^                  \n"
+        "(oo)\\_______          \n"
+        "(__)\\       )\\/\\      \n"
+        "    ||----w |         \n"
+        "    ||     ||         \n"
+        "\n"
+        "123456789ABCDEF\n";
+    
     warm::print(str, strlen(str));
     return 0;
 }
