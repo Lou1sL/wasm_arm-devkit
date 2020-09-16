@@ -6,8 +6,13 @@ namespace warm {
     static uint8_t warm_scr_ptr = 0;
     static void print(const char* str, size_t sz){
         for(std::size_t i=0; i<sz; i++){
-            scr_buffer[warm_scr_ptr] = str[i];
-            warm_scr_ptr++;
+            if(str[i] == '\n'){
+                warm_scr_ptr += 0b00100000;
+                warm_scr_ptr &= 0b11100000;
+            }else{
+                scr_buffer[warm_scr_ptr] = str[i];
+                warm_scr_ptr++;
+            }
         }
     }
 };
