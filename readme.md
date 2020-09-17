@@ -14,7 +14,3 @@ https://developer.arm.com/tools-and-software/open-source-software/developer-tool
 
 
 wasm_arm : http://ryubai.com/e/wasm_arm
-
-wasm_arm is an ARM CPU simulator with rich UI running inside client browser.
-
-It supports ARMv4T instruction set, and has 128KB free-to-whatever-use memory.

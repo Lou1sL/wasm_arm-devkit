@@ -40,7 +40,7 @@ _warm_init:
 	stmltia r1!, {r3}
 	blt		1b
 
-	/* Relocate .bss */
+	/* .bss must be init to 0 */
 	ldr     r1, =__bss_start__
 	ldr     r2, =__bss_end__
 	mov     r3, #0
@@ -49,12 +49,12 @@ _warm_init:
 	stmltia r1!, {r3}
 	blt		1b
 
-	/* Initialize .stack */
+	/* .stack marking */
 	ldr     r1,  =__stack_start__
 	ldr     r2,  =__stack_end__
 	ldr     r3,  =STACK_FILL
 1:
-	cmp     r1,  r2
+	cmp     r2,  r2
 	stmltia r1!, {r3}
 	blt     1b
 

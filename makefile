@@ -30,14 +30,8 @@ $(BUILD_DIR)/$(APP_NAME).hex : $(BUILD_DIR)/$(APP_NAME).bin
 $(BUILD_DIR)/$(APP_NAME).bin : $(BUILD_DIR)/$(APP_NAME).elf
 	$(OBJCOPY) -O binary $< $@
 
-$(BUILD_DIR)/$(APP_NAME).elf : \
-	$(SRC_DIR)/linker.ld \
-	$(BUILD_DIR)/bootloader.o \
-	$(BUILD_DIR)/main.o
-	$(LINK) \
-	$(BUILD_DIR)/bootloader.o \
-	$(BUILD_DIR)/main.o \
-	$(LINKFLAGS)
+$(BUILD_DIR)/$(APP_NAME).elf : $(SRC_DIR)/linker.ld $(BUILD_DIR)/bootloader.o $(BUILD_DIR)/main.o
+	$(LINK) $(BUILD_DIR)/bootloader.o $(BUILD_DIR)/main.o $(LINKFLAGS)
 
 $(BUILD_DIR)/bootloader.o: $(SRC_DIR)/bootloader.s
 	$(ASM) $(ASMFLAGS) $<

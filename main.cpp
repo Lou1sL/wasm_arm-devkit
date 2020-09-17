@@ -1,15 +1,16 @@
 #include "main.h"
 
+
+const char moo[] = 
+    "^__^               \n"
+    "(oo)\\_______       \n"
+    "(__)\\       )\\/\\   \n"
+    "    ||----w |      \n"
+    "    ||     ||      \n"
+    "\n"
+    "WELCOME TO WASM_ARM!\n";
+
 int main(void){
-    char str[] = 
-        "^__^                  \n"
-        "(oo)\\_______          \n"
-        "(__)\\       )\\/\\      \n"
-        "    ||----w |         \n"
-        "    ||     ||         \n"
-        "\n"
-        "123456789ABCDEF\n";
-    
-    warm::print(str, strlen(str));
+    warm::print(moo, strlen(moo));
     return 0;
 }
