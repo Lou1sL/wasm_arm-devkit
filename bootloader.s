@@ -95,6 +95,7 @@ _swi:
 
 
 _irq:
+	/* TODO: Follow AAPCS https://web.eecs.umich.edu/~prabal/teaching/resources/eecs373/ARM-AAPCS-EABI-v2.08.pdf */
 	mov r13, r0
 	sub r0, lr, #4
 	mov lr, r1
@@ -111,6 +112,7 @@ _irq:
 
     msr   cpsr_c, #(SYS | I)
 	
+	/* Enter Handler */
     ldr   r12, =irq_handler
     mov   lr, pc
     bx    r12
