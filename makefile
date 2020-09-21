@@ -12,7 +12,7 @@ OBJCOPY = "$(COMPILER_DIR)/bin/arm-none-eabi-objcopy"
 CCFLAGS = --specs=nosys.specs -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork -ffast-math \
 	-mlong-calls \
 	-ffunction-sections -fno-omit-frame-pointer\
-	-fno-asynchronous-unwind-tables -fno-exceptions -fno-rtti -nostdlib\
+	-fno-unwind-tables -fno-exceptions -fno-rtti -nostdlib\
 	-ffreestanding \
 	-Wall -DNDEBUG -O3 -c -o $@
 

@@ -16,11 +16,11 @@ int main(void){
 
 extern "C" void und_handler(void) {
     warm::print("UND EXCEPTION TRIGGERED\n");
-    for (;;) { }
+    return;
 }
 extern "C" void swi_handler(void) {
     warm::print("SWI EXCEPTION TRIGGERED\n");
-    for (;;) { } 
+    return;
 }
 extern "C" void irq_handler(void) {
     warm::print("IRQ EXCEPTION ENTER\n");
