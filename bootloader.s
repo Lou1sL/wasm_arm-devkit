@@ -15,31 +15,22 @@
 	.code 32
 	.global _bootloader
 	.func   _bootloader
+
 _bootloader:
 	/* Exception Vector */
-	b _warm_init /* RST */
-	b .          /* UND */
-	b .          /* SWI */
-	b .          /* PFA */
-	b .          /* DTA */
-	b .          /* --- */
-	b .          /* IRQ */
-	b .          /* FIQ */
+	b _rst
+	b _und
+	b _swi
+	b .    /* Not implemented in WASM_ARM */
+	b .    /* Not implemented in WASM_ARM */
+	b .
+	b _irq
+	b .    /* Not implemented in WASM_ARM */
 
 	.string "2020 ryubai.com by RyuBAI for WASM_ARM platform."
 	.align 4
 
-_warm_init:
-	/* Relocate .data */
-	ldr r0, =__data_load
-	ldr r1, =__data_start
-	ldr r2, =__data_end
-1:
-	cmp     r1, r2
-	ldmltia r0!, {r3}
-	stmltia r1!, {r3}
-	blt		1b
-
+_rst:
 	/* .bss must be init to 0 */
 	ldr     r1, =__bss_start__
 	ldr     r2, =__bss_end__
@@ -49,7 +40,7 @@ _warm_init:
 	stmltia r1!, {r3}
 	blt		1b
 
-	/* .stack marking */
+	/* .stack coloring */
 	ldr     r1,  =__stack_start__
 	ldr     r2,  =__stack_end__
 	ldr     r3,  =STACK_FILL
@@ -58,7 +49,7 @@ _warm_init:
 	stmltia r1!, {r3}
 	blt     1b
 
-	/* Initialize Stack pointer */
+	/* Initialize r13 for each bank */
 	msr CPSR_c, #(IRQ | I | F)
 	ldr sp    , =__irq_stack_top__
 	msr CPSR_c, #(FIQ | I | F)
@@ -72,17 +63,41 @@ _warm_init:
 	msr CPSR_c, #(SYS | I | F)
 	ldr sp    , =__sys_stack_top__
 
-	/* Execute static constructors */
+	/* Execute static c++ constructors */
 	ldr r12, =__libc_init_array
 	mov lr, pc
 	bx r12
 
-	/* Execute C/C++ main */
+	/* Execute c/c++ main */
 	ldr r12, =main
 	mov lr, pc
 	bx r12
 
 	swi 0xffffff
+
+
+_und:
+	sub r1, lr, #4
+	msr cpsr_c, #(SYS | I | F)
+	ldr r12, =und_handler
+	mov lr, pc 
+	bx  r12
+	b   .
+
+
+_swi:
+	sub r1, lr, #4
+	msr cpsr_c, #(SYS | I | F)
+	ldr r12, =swi_handler
+	mov lr, pc 
+	bx  r12
+	b   .
+
+
+_irq:
+	/* TODO */
+	b   .
+
 
 	.size _bootloader, . - _bootloader
 	.endfunc

@@ -5,22 +5,12 @@ ENTRY(_bootloader)
 MEMORY { RAM (rwx) : ORIGIN = 0x00000000, LENGTH = 128k }
 
 SECTIONS {
+
     .reset : {
         *bootloader.o (.text)
     .    = ALIGN(0x4);
     } >RAM
 
-    .data : { 
-        __data_load = LOADADDR (.data);
-        __data_start = .;
-        KEEP(*(.jcr))
-        *(.got.plt) *(.got)
-        *(.shdata)
-        *(.data .data.* .gnu.linkonce.d.*)
-        . = ALIGN (4);
-        __data_end = .;
-    } >RAM
-    
     .text : {
         CREATE_OBJECT_SYMBOLS
         *(.text .text.* .gnu.linkonce.t.*)
@@ -88,6 +78,18 @@ SECTIONS {
         . += 0x400; . = ALIGN (4); __sys_stack_top__ = . ;
         __stack_end__ = .; 
     } >RAM
+
+    /* No need to copy stuff like on real machine with ROM */
+    .data : {
+        __data_start = .;
+        KEEP(*(.jcr))
+        *(.got.plt) *(.got)
+        *(.shdata)
+        *(.data .data.* .gnu.linkonce.d.*)
+        . = ALIGN (4);
+        __data_end = .;
+    } >RAM
+
     _end = . ;
     __end = . ;
     __end__ = . ;
