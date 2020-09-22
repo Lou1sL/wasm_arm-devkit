@@ -72,7 +72,7 @@ _rst:
 	ldr r12, =main
 	mov lr, pc
 	bx  r12
-	b   .
+	swi 0xffffff
 
 
 _und:
@@ -96,9 +96,9 @@ _swi:
 _irq:
 	/* https://web.eecs.umich.edu/~prabal/teaching/resources/eecs373/ARM-AAPCS-EABI-v2.08.pdf */
 	mov r13, r0
-	sub r0, lr, #4
-	mov lr, r1
-	mrs r1, spsr
+	sub  r0, lr, #4
+	mov  lr, r1
+	mrs  r1, spsr
 
 	msr   cpsr_c, #(SYS | I)
     stmfd sp!, {r0, r1}

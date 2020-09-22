@@ -10,11 +10,15 @@ const char moo[] =
     "WELCOME TO WASM_ARM!!\n";
 
 int main(void){
+    SET_UND_EXCEP_HANDLER([](){ print("UND!\n"); });
+    SET_SWI_EXCEP_HANDLER([](){ print("SWI!\n"); });
+
+    SET_IRQ_EXCEP_HANDLER([](){ print("IRQ BEFORE/DURING PRINT!\n"); });
     asm("MSR cpsr_c,#(0b11111)");// Enable IRQ
-    SET_IRQ_EXCEP_HANDLER([](){ print("AN IRQ BEFORE & DURING PRINT!"); });
     print(moo);
+    SET_IRQ_EXCEP_HANDLER([](){ print("IRQ AFTER PRINT!\n"); });
     asm("MSR cpsr_c,#(0b11111)");// Enable IRQ
-    SET_IRQ_EXCEP_HANDLER([](){ print("AN IRQ AFTER PRINT!"); });
+    while(1){}
     return 0;
 }
 
