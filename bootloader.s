@@ -95,7 +95,7 @@ _swi:
 
 _irq:
 	/* https://web.eecs.umich.edu/~prabal/teaching/resources/eecs373/ARM-AAPCS-EABI-v2.08.pdf */
-	mov r13, r0
+	mov  r13, r0
 	sub  r0, lr, #4
 	mov  lr, r1
 	mrs  r1, spsr
