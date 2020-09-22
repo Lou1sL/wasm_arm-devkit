@@ -10,20 +10,11 @@ const char moo[] =
     "WELCOME TO WASM_ARM!!\n";
 
 int main(void){
-    warm::print(moo);
+    asm("MSR cpsr_c,#(0b11111)");// Enable IRQ
+    SET_IRQ_EXCEP_HANDLER([](){ print("AN IRQ BEFORE & DURING PRINT!"); });
+    print(moo);
+    asm("MSR cpsr_c,#(0b11111)");// Enable IRQ
+    SET_IRQ_EXCEP_HANDLER([](){ print("AN IRQ AFTER PRINT!"); });
     return 0;
 }
 
-extern "C" void und_handler(void) {
-    warm::print("UND EXCEPTION TRIGGERED\n");
-    return;
-}
-extern "C" void swi_handler(void) {
-    warm::print("SWI EXCEPTION TRIGGERED\n");
-    return;
-}
-extern "C" void irq_handler(void) {
-    warm::print("IRQ EXCEPTION ENTER\n");
-    warm::print("IRQ EXCEPTION EXIT\n");
-    return;
-}

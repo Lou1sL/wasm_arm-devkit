@@ -40,16 +40,16 @@ _rst:
 	stmltia r1!, {r3}
 	blt		1b
 
-	/* .stack coloring */
-	ldr     r1,  =__stack_start__
-	ldr     r2,  =__stack_end__
-	ldr     r3,  =STACK_FILL
+	/* .stack coloring
+    ldr     r1,  =__stack_start__
+    ldr     r2,  =__stack_end__
+    ldr     r3,  =STACK_FILL
 1:
-	cmp     r2,  r2
-	stmltia r1!, {r3}
-	blt     1b
+    cmp     r1,  r2
+    stmltia r1!, {r3}
+    blt     1b  */
 
-	/* Initialize r13 for each bank */
+	/* Initialize sp for each bank */
 	msr CPSR_c, #(IRQ | I | F)
 	ldr sp    , =__irq_stack_top__
 	msr CPSR_c, #(FIQ | I | F)
@@ -60,7 +60,7 @@ _rst:
 	ldr sp    , =__abt_stack_top__
 	msr CPSR_c, #(UND | I | F)
 	ldr sp    , =__und_stack_top__
-	msr CPSR_c, #(SYS | F) /* Enable IRQ */
+	msr CPSR_c, #(SYS | I | F) /* Enable IRQ */
 	ldr sp    , =__sys_stack_top__
 
 	/* Execute static c++ constructors */
@@ -71,16 +71,15 @@ _rst:
 	/* Execute c/c++ main */
 	ldr r12, =main
 	mov lr, pc
-	bx r12
-
-	swi 0xffffff
+	bx  r12
+	b   .
 
 
 _und:
 	sub r1, lr, #4
 	msr cpsr_c, #(SYS | I | F)
 	ldr r12, =und_handler
-	mov lr, pc 
+	mov lr, pc
 	bx  r12
 	b   .
 
@@ -89,13 +88,13 @@ _swi:
 	sub r1, lr, #4
 	msr cpsr_c, #(SYS | I | F)
 	ldr r12, =swi_handler
-	mov lr, pc 
+	mov lr, pc
 	bx  r12
 	b   .
 
 
 _irq:
-	/* TODO: Follow AAPCS https://web.eecs.umich.edu/~prabal/teaching/resources/eecs373/ARM-AAPCS-EABI-v2.08.pdf */
+	/* https://web.eecs.umich.edu/~prabal/teaching/resources/eecs373/ARM-AAPCS-EABI-v2.08.pdf */
 	mov r13, r0
 	sub r0, lr, #4
 	mov lr, r1
@@ -133,5 +132,25 @@ _irq:
 
 	.size _bootloader, . - _bootloader
 	.endfunc
+
+
+	.global lock_interrupt
+	.func   lock_interrupt
+lock_interrupt:
+	mrs r0, cpsr
+	msr cpsr_c, #(SYS | I | F)
+	bx lr
+	.size   lock_interrupt, . - lock_interrupt
+    .endfunc
+
+
+	.global unlock_interrupt
+	.func   unlock_interrupt
+unlock_interrupt:
+	msr cpsr, r0
+	bx lr
+	.size   unlock_interrupt, . - unlock_interrupt
+    .endfunc
+
 
 	.end
