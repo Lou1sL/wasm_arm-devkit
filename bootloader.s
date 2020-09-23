@@ -134,22 +134,23 @@ _irq:
 	.endfunc
 
 
-	.global lock_interrupt
-	.func   lock_interrupt
-lock_interrupt:
-	mrs r0, cpsr
-	msr cpsr_c, #(SYS | I | F)
+	.global ARM_LOCK_CBIT
+	.func   ARM_LOCK_CBIT
+ARM_LOCK_CBIT:
+	mrs r1, cpsr
+	msr cpsr_c, r0
+	mov r0, r1
 	bx lr
-	.size   lock_interrupt, . - lock_interrupt
+	.size   ARM_LOCK_CBIT, . - ARM_LOCK_CBIT
     .endfunc
 
 
-	.global unlock_interrupt
-	.func   unlock_interrupt
-unlock_interrupt:
-	msr cpsr, r0
+	.global ARM_UNLOCK_CBIT
+	.func   ARM_UNLOCK_CBIT
+ARM_UNLOCK_CBIT:
+	msr cpsr_c, r0
 	bx lr
-	.size   unlock_interrupt, . - unlock_interrupt
+	.size   ARM_UNLOCK_CBIT, . - ARM_UNLOCK_CBIT
     .endfunc
 
 
