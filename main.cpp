@@ -48,6 +48,5 @@ int main(void){
     __attribute__((unused)) int a = test.DumbFuncCall();
     test.PrintMoo();
     test.TestIRQ();
-    while(1){}
     return 0;
 }
