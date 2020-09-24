@@ -59,6 +59,17 @@ SECTIONS {
     } >RAM
     _etext = .;
 
+    /* No need to copy stuff like on real machine with ROM */
+    .data : {
+        __data_start = .;
+        KEEP(*(.jcr))
+        *(.got.plt) *(.got)
+        *(.shdata)
+        *(.data .data.* .gnu.linkonce.d.*)
+        . = ALIGN (4);
+        __data_end = .;
+    } >RAM
+
     .bss : {
         __bss_start__ = . ;
         *(.shbss)
@@ -77,17 +88,6 @@ SECTIONS {
         . += 0x100; . = ALIGN (4); __und_stack_top__ = . ;
         . += 0x400; . = ALIGN (4); __sys_stack_top__ = . ;
         __stack_end__ = .; 
-    } >RAM
-
-    /* No need to copy stuff like on real machine with ROM */
-    .data : {
-        __data_start = .;
-        KEEP(*(.jcr))
-        *(.got.plt) *(.got)
-        *(.shdata)
-        *(.data .data.* .gnu.linkonce.d.*)
-        . = ALIGN (4);
-        __data_end = .;
     } >RAM
 
     _end = . ;
