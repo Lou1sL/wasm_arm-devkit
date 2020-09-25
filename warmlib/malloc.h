@@ -1,15 +1,16 @@
+
 #include <cinttypes>
 
+volatile uint8_t* const heap = (uint8_t*)0x001FE00;
 constexpr size_t BYTE_ALIGN = 4;
-constexpr size_t HEAP_SIZE = 100;
-char heap[HEAP_SIZE];
+constexpr size_t HEAP_SIZE = 0x100;
 
 struct block_info {
     struct block_info *prev;
     struct block_info *next;
     size_t block_size;
     bool used;
-} __attribute__ ((aligned (32)));
+} __attribute__ ((aligned (4)));
 struct block_info *info_head = (block_info*)heap;
 
 void infoHeadInit(){
@@ -32,7 +33,7 @@ block_info* prepareUnusedBlock(size_t size_need){
         //If the space left out can't even fit a info struct, then there is no need to create a new block anyway.
         target_block->used = true;
     }else{
-        struct block_info *new_block = (block_info*)((block_info*)target_block + size_need);
+        struct block_info *new_block = (block_info*)(target_block + size_need);
         new_block->prev = target_block;
         new_block->next = target_block->next;
         new_block->block_size = target_block->block_size - size_need;
@@ -71,6 +72,10 @@ extern "C" void *malloc(size_t size) {
 }
 
 extern "C" void free(void *ptr) {
+    if((ptr == nullptr) || (ptr < heap) || (ptr >= heap+HEAP_SIZE)) {
+        //print("FREE FAILED!\n");
+        return;
+    }
     ((block_info*)ptr)->used = false;
     mergeUnusedBlock();
 }

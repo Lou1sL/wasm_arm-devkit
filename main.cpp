@@ -46,8 +46,11 @@ void TEST_CLASS::TestIRQ(){
 int main(void){
 
     char* testMalloc1 = (char*)malloc(10);
-    if(testMalloc1 != nullptr) print("OK!\n");
-    else print("NOT OK!\n");
+    testMalloc1[0] = 0x69;
+    testMalloc1[9] = 0x69;
+    //if(testMalloc1 != nullptr) print("OK!\n");
+    //else print("NOT OK!\n");
+    //free(testMalloc1);
     //if(testMalloc1 != nullptr) for(int i=0; i<10; i++) testMalloc1[i] = '0' + i;
     //else print("NULL1\n");
 //
