@@ -2,12 +2,12 @@
 #include <cstring>
 #include <cinttypes>
 
-volatile uint8_t* const scr_buffer = (uint8_t*)0x001FF00;
+volatile uint8_t* const scr_io = (uint8_t*)0x001FF00;
 uint8_t warm_scr_ptr = 0;
 void clear(){
     warm_scr_ptr = 0;
     for(std::size_t i=0; i<0x100; i++){
-        scr_buffer[i] = 0x20;
+        scr_io[i] = 0x20;
     }
 }
 void print(const char* str, size_t size){
@@ -15,7 +15,7 @@ void print(const char* str, size_t size){
         if(str[i] == '\n' || str[i] == '\r'){
             warm_scr_ptr = (warm_scr_ptr + 0b00100000) & 0b11100000;
         }else{
-            scr_buffer[warm_scr_ptr++] = str[i];
+            scr_io[warm_scr_ptr++] = str[i];
         }
     }
 }
@@ -32,8 +32,8 @@ void print(int num, int base = 10){
     int d = digits - 1;
     do{
         int mod = num % base;
-        if(mod >= 10) scr_buffer[warm_scr_ptr+d] = 'A' + (mod - 10);
-        else scr_buffer[warm_scr_ptr+d] = '0' + mod;
+        if(mod >= 10) scr_io[warm_scr_ptr+d] = 'A' + (mod - 10);
+        else scr_io[warm_scr_ptr+d] = '0' + mod;
         num /= base;
         d--;
     }while(num!=0);
