@@ -1,9 +1,9 @@
 
 #include <cinttypes>
 
-volatile uint8_t* const heap = (uint8_t*)0x001FE00;
 constexpr size_t BYTE_ALIGN = 4;
-constexpr size_t HEAP_SIZE = 0x100;
+constexpr size_t HEAP_SIZE = 0x8000; //32KB
+unsigned char __attribute__((section (".heap"))) heap[HEAP_SIZE];
 
 struct block_info {
     block_info *prev;

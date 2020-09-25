@@ -45,21 +45,17 @@ void TEST_CLASS::TestIRQ(){
 
 int main(void){
 
-    char* testMalloc1 = (char*)malloc(0x70);
-    char* testMalloc2 = (char*)malloc(0x50);
+    char* testMalloc1 = (char*)malloc(16);
+    char* testMalloc2 = (char*)malloc(16);
+    if(testMalloc1 != nullptr) for(int i=0; i<16; i++) testMalloc1[i] = 0x11;
+    else print("1 FAILED!\n");
+    if(testMalloc2 != nullptr) for(int i=0; i<16; i++) testMalloc2[i] = 0x22;
+    else print("2 FAILED!\n");
     free(testMalloc1);
     free(testMalloc2);
-    //testMalloc1[0] = 0x69;
-    //testMalloc1[9] = 0x69;
-    //if(testMalloc1 != nullptr) print("OK!\n");
-    //else print("NOT OK!\n");
-    //free(testMalloc1);
-    //if(testMalloc1 != nullptr) for(int i=0; i<10; i++) testMalloc1[i] = '0' + i;
-    //else print("NULL1\n");
-//
-    //char* testMalloc2 = (char*)malloc(10);
-    //if(testMalloc2 != nullptr) for(int i=0; i<10; i++) testMalloc2[i] = '0' + i;
-    //else print("NULL2\n");
+    testMalloc1 = (char*)malloc(32);
+    if(testMalloc1 != nullptr) for(int i=0; i<32; i++) testMalloc1[i] = 0x66;
+    else print("11 FAILED!\n");
 
     //TEST_CLASS test;
     //__attribute__((unused)) int a = test.DumbFuncCall();
