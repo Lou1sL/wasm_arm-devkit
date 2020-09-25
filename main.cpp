@@ -4,13 +4,14 @@
 
 class TEST_CLASS {
 public:
-
-    TEST_CLASS(){ 
+    TEST_CLASS(){
+        print("CONSTRUCTOR!\n");
         SET_UND_EXCEP_HANDLER([](){ print("EXCEP UND!\n"); });
         SET_SWI_EXCEP_HANDLER([](){ print("EXCEP SWI!\n"); });
     }
 
     ~TEST_CLASS(){
+        print("DESTROYED!\n");
         SET_UND_EXCEP_HANDLER([](){});
         SET_SWI_EXCEP_HANDLER([](){});
     }
@@ -34,33 +35,24 @@ void TEST_CLASS::PrintMoo(){
 }
 void TEST_CLASS::TestIRQ(){
     print("IRQ ENABLED!\n");
-    ARM_CBIT_LOCK lock = ARM_LOCK_CBIT(ARM_CBIT_SYS_INT_ENABLE);
     SET_IRQ_EXCEP_HANDLER([](){ print("IRQ BEFORE/DURING PRINT!\n"); });
+    ARM_CBIT_LOCK lock = ARM_LOCK_CBIT(ARM_CBIT_SYS_INT_ENABLE);
     print("I'm PRINT!\n");
+    ARM_UNLOCK_CBIT(lock);
     SET_IRQ_EXCEP_HANDLER([](){ print("IRQ AFTER PRINT!\n"); });
+    lock = ARM_LOCK_CBIT(ARM_CBIT_SYS_INT_ENABLE);
     print("I'm AFTER PRINT!\n");
     ARM_UNLOCK_CBIT(lock);
     print("IRQ DISABLED!\n");
 }
 
 int main(void){
-
-    char* testMalloc1 = (char*)malloc(16);
-    char* testMalloc2 = (char*)malloc(16);
-    if(testMalloc1 != nullptr) for(int i=0; i<16; i++) testMalloc1[i] = 0x11;
-    else print("1 FAILED!\n");
-    if(testMalloc2 != nullptr) for(int i=0; i<16; i++) testMalloc2[i] = 0x22;
-    else print("2 FAILED!\n");
-    free(testMalloc1);
-    free(testMalloc2);
-    testMalloc1 = (char*)malloc(32);
-    if(testMalloc1 != nullptr) for(int i=0; i<32; i++) testMalloc1[i] = 0x66;
-    else print("11 FAILED!\n");
-
-    //TEST_CLASS test;
-    //__attribute__((unused)) int a = test.DumbFuncCall();
-    //test.PrintMoo();
-    //test.TestIRQ();
+    TEST_CLASS* test = new TEST_CLASS();
+    __attribute__((unused))
+    int a = test->DumbFuncCall();
+    test->PrintMoo();
+    test->TestIRQ();
+    delete test;
     return 0;
 }
 

@@ -52,7 +52,7 @@ void mergeUnusedBlock(){
         if((!block->used) && (!block->next->used)){
             block->block_size += block->next->block_size;
             block->next = block->next->next;
-            block->next->prev = block;
+            if(block->next != nullptr) block->next->prev = block;
         }
         block = block->next;
     }
