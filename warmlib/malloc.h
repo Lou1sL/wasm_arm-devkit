@@ -33,7 +33,7 @@ block_info* prepareUnusedBlock(size_t size_need){
         //If the space left out can't even fit a info struct, then there is no need to create a new block anyway.
         target_block->used = true;
     }else{
-        block_info *new_block = (block_info*)((void*)target_block + size_need);
+        block_info *new_block = (block_info*)((char*)target_block + size_need);
         new_block->prev = target_block;
         new_block->next = target_block->next;
         new_block->block_size = target_block->block_size - size_need;
@@ -71,7 +71,7 @@ extern "C" void *malloc(size_t size) {
     //I hope block_info is properly aligned, I hope...
     size_t total_size = sizeof(block_info) + align(size);
     block_info* info = prepareUnusedBlock(total_size);
-    return (void*)((void*)info + sizeof(block_info));
+    return (void*)((char*)info + sizeof(block_info));
 }
 
 extern "C" void free(void *ptr) {
@@ -79,7 +79,7 @@ extern "C" void free(void *ptr) {
         print("FREE FAILED!\n");
         return;
     }
-    ((block_info*)(ptr-sizeof(block_info)))->used = false;
+    ((block_info*)((char*)ptr-sizeof(block_info)))->used = false;
     mergeUnusedBlock();
 }
 
