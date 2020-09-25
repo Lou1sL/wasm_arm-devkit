@@ -66,8 +66,8 @@ extern "C" void *malloc(size_t size) {
     if(!initialized) { infoHeadInit(); initialized = true; }
     //I hope block_info is properly aligned, I hope...
     size_t total_size = sizeof(block_info) + align(size);
-    prepareUnusedBlock(total_size);
-    return (void *)(block + sizeof(block_info));
+    block_info* info = prepareUnusedBlock(total_size);
+    return (void*)(info + sizeof(block_info));
 }
 
 extern "C" void free(void *ptr) {
