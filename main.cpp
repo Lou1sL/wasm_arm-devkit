@@ -44,9 +44,20 @@ void TEST_CLASS::TestIRQ(){
 }
 
 int main(void){
-    TEST_CLASS test;
-    __attribute__((unused)) int a = test.DumbFuncCall();
-    test.PrintMoo();
-    test.TestIRQ();
+
+    char* testMalloc1 = (char*)malloc(10);
+    if(testMalloc1 != nullptr) print("OK!\n");
+    else print("NOT OK!\n");
+    //if(testMalloc1 != nullptr) for(int i=0; i<10; i++) testMalloc1[i] = '0' + i;
+    //else print("NULL1\n");
+//
+    //char* testMalloc2 = (char*)malloc(10);
+    //if(testMalloc2 != nullptr) for(int i=0; i<10; i++) testMalloc2[i] = '0' + i;
+    //else print("NULL2\n");
+
+    //TEST_CLASS test;
+    //__attribute__((unused)) int a = test.DumbFuncCall();
+    //test.PrintMoo();
+    //test.TestIRQ();
     return 0;
 }
