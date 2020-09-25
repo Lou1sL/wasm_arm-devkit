@@ -45,11 +45,10 @@ void TEST_CLASS::TestIRQ(){
 
 int main(void){
 
-    char* testMalloc1 = (char*)malloc(0);
-    testMalloc1 = (char*)malloc(0);
-    testMalloc1 = (char*)malloc(0);
-    testMalloc1 = (char*)malloc(0);
-    testMalloc1 = (char*)malloc(0);
+    char* testMalloc1 = (char*)malloc(0x70);
+    char* testMalloc2 = (char*)malloc(0x50);
+    free(testMalloc1);
+    free(testMalloc2);
     //testMalloc1[0] = 0x69;
     //testMalloc1[9] = 0x69;
     //if(testMalloc1 != nullptr) print("OK!\n");

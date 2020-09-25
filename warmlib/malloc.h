@@ -52,6 +52,7 @@ void mergeUnusedBlock(){
         if((!block->used) && (!block->next->used)){
             block->block_size += block->next->block_size;
             block->next = block->next->next;
+            block->next->prev = block;
         }
         block = block->next;
     }
@@ -59,6 +60,7 @@ void mergeUnusedBlock(){
 
 inline size_t align(size_t size){
     if(size == 0) return 0;
+    if(size % BYTE_ALIGN == 0) return size;
     return size + (BYTE_ALIGN - size % BYTE_ALIGN);
 }
 
@@ -69,7 +71,7 @@ extern "C" void *malloc(size_t size) {
     //I hope block_info is properly aligned, I hope...
     size_t total_size = sizeof(block_info) + align(size);
     block_info* info = prepareUnusedBlock(total_size);
-    return (void*)(info + sizeof(block_info));
+    return (void*)((void*)info + sizeof(block_info));
 }
 
 extern "C" void free(void *ptr) {
@@ -77,7 +79,7 @@ extern "C" void free(void *ptr) {
         print("FREE FAILED!\n");
         return;
     }
-    ((block_info*)ptr)->used = false;
+    ((block_info*)(ptr-sizeof(block_info)))->used = false;
     mergeUnusedBlock();
 }
 
