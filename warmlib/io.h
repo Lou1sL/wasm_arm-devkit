@@ -22,3 +22,17 @@ void print(const char* str, size_t size){
 void print(const char* str){
     print(str, strlen(str));
 }
+void print(int num, int base = 10){
+    int digits = 0;
+    int n = num;
+    do { n /= base; digits++; } while (n != 0);
+    int d = digits - 1;
+    do{
+        int mod = num % base;
+        if(mod >= 10) scr_buffer[warm_scr_ptr+d] = 'A' + (mod - 10);
+        else scr_buffer[warm_scr_ptr+d] = '0' + mod;
+        num /= base;
+        d--;
+    }while(num!=0);
+    warm_scr_ptr += digits;
+}
