@@ -45,9 +45,13 @@ void TEST_CLASS::TestIRQ(){
 
 int main(void){
 
-    char* testMalloc1 = (char*)malloc(10);
-    testMalloc1[0] = 0x69;
-    testMalloc1[9] = 0x69;
+    char* testMalloc1 = (char*)malloc(0);
+    testMalloc1 = (char*)malloc(0);
+    testMalloc1 = (char*)malloc(0);
+    testMalloc1 = (char*)malloc(0);
+    testMalloc1 = (char*)malloc(0);
+    //testMalloc1[0] = 0x69;
+    //testMalloc1[9] = 0x69;
     //if(testMalloc1 != nullptr) print("OK!\n");
     //else print("NOT OK!\n");
     //free(testMalloc1);
@@ -64,3 +68,5 @@ int main(void){
     //test.TestIRQ();
     return 0;
 }
+
+//for(var i=0; i<0x20000; i++) if(SIM_memget(i) == 0x69) console.log(i.toString(16))

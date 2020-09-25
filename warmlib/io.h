@@ -22,6 +22,9 @@ void print(const char* str, size_t size){
 void print(const char* str){
     print(str, strlen(str));
 }
+void print(const char c){
+    print(&c, 1);
+}
 void print(int num, int base = 10){
     int digits = 0;
     int n = num;

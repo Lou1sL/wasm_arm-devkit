@@ -6,8 +6,8 @@ constexpr size_t BYTE_ALIGN = 4;
 constexpr size_t HEAP_SIZE = 0x100;
 
 struct block_info {
-    struct block_info *prev;
-    struct block_info *next;
+    block_info *prev;
+    block_info *next;
     size_t block_size;
     bool used;
 } __attribute__ ((aligned (4)));
@@ -33,12 +33,12 @@ block_info* prepareUnusedBlock(size_t size_need){
         //If the space left out can't even fit a info struct, then there is no need to create a new block anyway.
         target_block->used = true;
     }else{
-        struct block_info *new_block = (block_info*)(target_block + size_need);
+        block_info *new_block = (block_info*)((void*)target_block + size_need);
         new_block->prev = target_block;
         new_block->next = target_block->next;
         new_block->block_size = target_block->block_size - size_need;
         new_block->used = false;
-
+        
         target_block->next = new_block;
         target_block->block_size = size_need;
         target_block->used = true;
@@ -47,7 +47,7 @@ block_info* prepareUnusedBlock(size_t size_need){
 }
 
 void mergeUnusedBlock(){
-    struct block_info *block = info_head;
+    block_info *block = info_head;
     while((block != nullptr) && (block->next != nullptr)){
         if((!block->used) && (!block->next->used)){
             block->block_size += block->next->block_size;
@@ -58,6 +58,7 @@ void mergeUnusedBlock(){
 }
 
 inline size_t align(size_t size){
+    if(size == 0) return 0;
     return size + (BYTE_ALIGN - size % BYTE_ALIGN);
 }
 
@@ -73,7 +74,7 @@ extern "C" void *malloc(size_t size) {
 
 extern "C" void free(void *ptr) {
     if((ptr == nullptr) || (ptr < heap) || (ptr >= heap+HEAP_SIZE)) {
-        //print("FREE FAILED!\n");
+        print("FREE FAILED!\n");
         return;
     }
     ((block_info*)ptr)->used = false;
