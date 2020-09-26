@@ -9,8 +9,7 @@ class B : public A {
     public: virtual void foo(){ print("B foo()\n"); }
 };
 
-int main(void){
-
+void testPoly(){
     A* a = new A();
     B* b = new B();
     A* aa;
@@ -28,6 +27,11 @@ int main(void){
 
     delete a;
     delete b;
+}
+
+int main(void){
+
+    testPoly();
 
     return 0;
 }

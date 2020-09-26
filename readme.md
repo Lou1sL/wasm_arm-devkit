@@ -3,7 +3,7 @@ wasm_arm-devkit
 wasm_arm : http://ryubai.com/e/wasm_arm
 
 
-This is a demo of compiling C++ code to execute inside wasm_arm.
+This is a demo of compiling C++ code for wasm_arm.
 
 It has 4KB user/system mode stack, 256Bytes for each other mode stacks, and 32KB heap.
 
