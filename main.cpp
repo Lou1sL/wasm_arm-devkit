@@ -1,8 +1,5 @@
 #include "main.h"
 
-int TEST_CLASS::DumbFuncCall(uint32_t x = 0x33443344, uint32_t y = 0x11221122){
-    return 0x55665566;
-}
 void TEST_CLASS::Moo(){
     print(this->moo);
 }
@@ -22,30 +19,25 @@ void TEST_CLASS::TestInterrupt(){
     SET_UND_EXCEP_HANDLER([](){});
     SET_SWI_EXCEP_HANDLER([](){});
 }
-void TEST_CLASS::TestVirtual()  { print("I'm BASE!\n");    }
-void TEST_VIRTUAL::TestVirtual(){ print("I'm DERIVED!\n"); }
+void TEST_CLASS::TestVirtual()  { print("TEST_CLASS::TestVirtual()\n");   }
+void TEST_VIRTUAL::TestVirtual(){ print("TEST_VIRTUAL::TestVirtual()\n"); }
 
-TEST_CLASS::TEST_CLASS()     { print("BASE CONSTRUCTOR!\n");  }
-TEST_CLASS::~TEST_CLASS()    { print("BASE DESTROYED!\n");    }
-TEST_VIRTUAL::~TEST_VIRTUAL(){ print("DERIVED DESTROYED!\n"); }
+TEST_CLASS::TEST_CLASS()     { print("TEST_CLASS::TEST_CLASS()\n");      }
+TEST_CLASS::~TEST_CLASS()    { print("TEST_CLASS::~TEST_CLASS()\n");     }
+TEST_VIRTUAL::TEST_VIRTUAL() { print("TEST_VIRTUAL::TEST_VIRTUAL()\n");  }
+TEST_VIRTUAL::~TEST_VIRTUAL(){ print("TEST_VIRTUAL::~TEST_VIRTUAL()\n"); }
 
 int main(void){
 
     TEST_CLASS* base = new TEST_CLASS();
     TEST_VIRTUAL* derived = new TEST_VIRTUAL();
-    //__attribute__((unused))
-    //int a = test_base->DumbFuncCall();
-    //test_base->Moo();
-    //test_base->TestInterrupt();
     
-
-
     TEST_CLASS* test = base;
     test->TestVirtual();
     test = derived;
     test->TestVirtual();
     TEST_VIRTUAL* test2 = dynamic_cast<TEST_VIRTUAL*>(test);
-    if(test2 == nullptr) print("DOWNCAST FAILED!\n");
+    if(test2 == nullptr) print("DOWN CAST FAILED!\n");
     else test2->TestVirtual();
 
     delete base;
