@@ -71,15 +71,15 @@ extern "C" void *malloc(size_t size) {
     //I hope block_info is properly aligned, I hope...
     size_t total_size = sizeof(block_info) + align(size);
     block_info* info = prepareUnusedBlock(total_size);
+    if(info == nullptr) return nullptr;
     return (void*)((char*)info + sizeof(block_info));
 }
 
 extern "C" void free(void *ptr) {
-    if((ptr == nullptr) || (ptr < heap) || (ptr >= heap+HEAP_SIZE)) {
-        print("FREE FAILED!\n");
-        return;
-    }
-    ((block_info*)((char*)ptr-sizeof(block_info)))->used = false;
+    if((ptr == nullptr) || (ptr < heap) || (ptr >= heap+HEAP_SIZE)) return;
+    bool* used = &(((block_info*)((char*)ptr-sizeof(block_info)))->used);
+    if(*used) *used = false;
+    else return;
     mergeUnusedBlock();
 }
 
