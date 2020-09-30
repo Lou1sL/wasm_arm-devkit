@@ -1,3 +1,9 @@
+/**
+ * This is a simple implementaion of C's malloc/free and C++'s new/delete for WASM_ARM.
+ * No Exception support.
+ * 
+ */
+
 
 #include <cinttypes>
 
@@ -30,7 +36,7 @@ block_info* prepareUnusedBlock(size_t size_need){
     block_info* target_block = findUnusedBlock(info_head, size_need);
     if(target_block == nullptr) return nullptr;
     if(target_block->block_size <= (size_need + sizeof(block_info))) {
-        //If the space left out can't even fit a info struct, then there is no need to create a new block anyway.
+        //If the space left out can't even fit in an info struct, then there is no need to create a new block anyway.
         target_block->used = true;
     }else{
         block_info *new_block = (block_info*)((char*)target_block + size_need);
@@ -84,13 +90,19 @@ extern "C" void free(void *ptr) {
 }
 
 
-void *operator new(size_t size) throw() {
+void *operator new(size_t size) noexcept {
     return malloc(size);
 }
-void operator delete(void *p) throw() {
+void *operator new[](size_t size) noexcept {
+    return operator new(size);
+} 
+void operator delete(void *p) noexcept {
     free(p);
 }
-extern "C" int __aeabi_atexit(void *object, void (*destructor)(void *), void *dso_handle) { 
+void operator delete[](void *p) noexcept {
+    operator delete(p);
+} 
+extern "C" int __aeabi_atexit(void *object, void (*destructor)(void *), void *dso_handle) {
     return 0;
 }
 
