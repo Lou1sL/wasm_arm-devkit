@@ -2,7 +2,7 @@
 #include <cstring>
 #include <cinttypes>
 
-volatile uint8_t* const scr_io = (uint8_t*)0x001FF00;
+volatile uint8_t* const scr_io = (uint8_t*)0x01FFFF00;
 uint8_t warm_scr_ptr = 0;
 void clear(){
     warm_scr_ptr = 0;
