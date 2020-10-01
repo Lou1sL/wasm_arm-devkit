@@ -81,18 +81,19 @@ SECTIONS {
 
     .stack : {
         __stack_start__ = . ;
-        . += 0x0100; . = ALIGN (4); __irq_stack_top__ = . ;
-        . += 0x0100; . = ALIGN (4); __fiq_stack_top__ = . ;
-        . += 0x0100; . = ALIGN (4); __svc_stack_top__ = . ;
-        . += 0x0100; . = ALIGN (4); __abt_stack_top__ = . ;
-        . += 0x0100; . = ALIGN (4); __und_stack_top__ = . ;
-        . += 0x1000; . = ALIGN (4); __sys_stack_top__ = . ;
+        . += 0x00001000; . = ALIGN (4); __irq_stack_top__ = . ; /* 4KB */
+        . += 0x00001000; . = ALIGN (4); __fiq_stack_top__ = . ;
+        . += 0x00001000; . = ALIGN (4); __svc_stack_top__ = . ;
+        . += 0x00001000; . = ALIGN (4); __abt_stack_top__ = . ;
+        . += 0x00001000; . = ALIGN (4); __und_stack_top__ = . ;
+        . += 0x00100000; . = ALIGN (4); __sys_stack_top__ = . ; /* 1MB */
         __stack_end__ = .; 
     } >RAM
 
     .heap : {
         __heap_start = . ;
         KEEP(*(.heap))
+        . = ALIGN (4);
         __heap_end = . ;
     } >RAM
 

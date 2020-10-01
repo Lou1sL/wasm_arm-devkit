@@ -8,7 +8,7 @@
 #include <cinttypes>
 
 constexpr size_t BYTE_ALIGN = 4;
-constexpr size_t HEAP_SIZE = 0x8000; //32KB
+constexpr size_t HEAP_SIZE = 0x00100000; //1MB
 unsigned char __attribute__((section (".heap"))) heap[HEAP_SIZE];
 
 struct block_info {
