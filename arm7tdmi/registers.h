@@ -18,9 +18,9 @@ struct RegisterGroup {
     StatusRegister cpsr, spsr[BANK_COUNT];
     StatusRegister* p_spsr;
     void Reset(){
-        for(int i=0;i<GENERAL_REG_SIZE;i++) current[i] = 0;
-        for(int i=0;i<BANK_COUNT;i++){
-            for(int j=0;j<BANK_SIZE;j++) banked[i][j] = 0;
+        for(std::size_t i=0;i<GENERAL_REG_SIZE;i++) current[i] = 0;
+        for(std::size_t i=0;i<BANK_COUNT;i++){
+            for(std::size_t j=0;j<BANK_SIZE;j++) banked[i][j] = 0;
             spsr[i] = 0;
         }
         cpsr = 0;
@@ -41,7 +41,7 @@ struct RegisterGroup {
         cpsr.m = m;
         p_spsr = n == BANK_SYSUSR ? &cpsr : &spsr[n];
         if(o == n) return;
-        for (int i = 0; i < BANK_SIZE; i++) {
+        for (std::size_t i = 0; i < BANK_SIZE; i++) {
             if((o != BANK_FIQ && n != BANK_FIQ) && (i != 5 && i != 6)) continue;
             banked[o][i] = current[8+i];
             current[8+i] = banked[n][i];
