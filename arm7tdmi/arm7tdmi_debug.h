@@ -2,34 +2,6 @@
 
 #include "arm7tdmi.h"
 
-struct DebugStatus {
-    std::uint32_t pipeline[3];
-
-    std::uint32_t reg_current_general[GENERAL_REG_SIZE];
-    std::uint32_t reg_current_cpsr;
-    std::uint32_t reg_current_spsr;
-
-    std::uint32_t reg_banked_general_sysusr[BANK_SIZE];
-    std::uint32_t reg_banked_general_fiq[BANK_SIZE];
-    std::uint32_t reg_banked_general_irq[BANK_SIZE];
-    std::uint32_t reg_banked_general_svc[BANK_SIZE];
-    std::uint32_t reg_banked_general_abt[BANK_SIZE];
-    std::uint32_t reg_banked_general_und[BANK_SIZE];
-
-    std::uint32_t reg_banked_spsr_fiq;
-    std::uint32_t reg_banked_spsr_irq;
-    std::uint32_t reg_banked_spsr_svc;
-    std::uint32_t reg_banked_spsr_abt;
-    std::uint32_t reg_banked_spsr_und;
-
-    bool cond_cpsr[16];
-    bool cond_spsr_fiq[16];
-    bool cond_spsr_irq[16];
-    bool cond_spsr_svc[16];
-    bool cond_spsr_abt[16];
-    bool cond_spsr_und[16];
-};
-
 template <std::size_t N>
 class BusBindFullRAM : public BusInterface {
 public:
@@ -93,44 +65,6 @@ public:
         for(std::size_t i=0; i<BANK_COUNT; i++)
             cpu.registers.banked[i][BANK_R13] = val;
         cpu.registers[13] = val;
-    }
-    void Step() {
-        cpu.Step();
-    }
-
-    DebugStatus GetStatus(){
-        DebugStatus sta;
-        sta.pipeline[0] = cpu.instruction_register;
-        sta.pipeline[1] = cpu.pipeline[0];
-        sta.pipeline[2] = cpu.pipeline[1];
-        for(std::size_t i=0; i<GENERAL_REG_SIZE; i++){
-            sta.reg_current_general[i] = cpu.registers[i];
-        }
-        sta.reg_current_cpsr = cpu.registers.cpsr.value;
-        sta.reg_current_spsr = (*cpu.registers.p_spsr).value;
-        for(std::size_t i=0; i<BANK_SIZE; i++){
-            sta.reg_banked_general_sysusr[i] = cpu.registers.banked[BANK_SYSUSR][i];
-            sta.reg_banked_general_fiq[i]    = cpu.registers.banked[BANK_FIQ][i];
-            sta.reg_banked_general_irq[i]    = cpu.registers.banked[BANK_IRQ][i];
-            sta.reg_banked_general_svc[i]    = cpu.registers.banked[BANK_SVC][i];
-            sta.reg_banked_general_abt[i]    = cpu.registers.banked[BANK_ABT][i];
-            sta.reg_banked_general_und[i]    = cpu.registers.banked[BANK_UND][i];
-        }
-        sta.reg_banked_spsr_fiq = cpu.registers.spsr[BANK_FIQ].value;
-        sta.reg_banked_spsr_irq = cpu.registers.spsr[BANK_IRQ].value;
-        sta.reg_banked_spsr_svc = cpu.registers.spsr[BANK_SVC].value;
-        sta.reg_banked_spsr_abt = cpu.registers.spsr[BANK_ABT].value;
-        sta.reg_banked_spsr_und = cpu.registers.spsr[BANK_UND].value;
-
-        for(int i=0;i<16;i++){
-            sta.cond_cpsr[i] = cpu.condition_table[cpu.registers.cpsr.nzcv][i];
-            sta.cond_spsr_fiq[i] = cpu.condition_table[cpu.registers.spsr[BANK_FIQ].nzcv][i];
-            sta.cond_spsr_irq[i] = cpu.condition_table[cpu.registers.spsr[BANK_IRQ].nzcv][i];
-            sta.cond_spsr_svc[i] = cpu.condition_table[cpu.registers.spsr[BANK_SVC].nzcv][i];
-            sta.cond_spsr_abt[i] = cpu.condition_table[cpu.registers.spsr[BANK_ABT].nzcv][i];
-            sta.cond_spsr_und[i] = cpu.condition_table[cpu.registers.spsr[BANK_UND].nzcv][i];
-        }
-        return sta;
     }
 };
 

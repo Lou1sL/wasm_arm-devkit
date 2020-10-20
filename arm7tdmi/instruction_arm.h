@@ -385,8 +385,8 @@ void ARM7TDMI::ARMHalfwordDataTransfer(ARMInstruction instruction){
 template <int i, int p, int u, int b, int w, int l, int i7_4>
 void ARM7TDMI::ARMSingleDataTransfer(ARMInstruction instruction)  {
     std::uint32_t addr        = registers[instruction.sdt.rn];
-    std::uint32_t shift       = instruction.sdt.offset & 0xFF0;
-    std::uint32_t rm          = instruction.sdt.offset & 0x00F;
+    std::uint32_t shift       = (instruction.sdt.offset & 0xFF0) >> 4;
+    std::uint32_t rm          = (instruction.sdt.offset & 0x00F) >> 0;
     //The register specified shift amounts are not available in this instruction class. 
     //std::uint32_t reg_specified = (shift & 0b00000001) >> 0;
     std::uint32_t shift_type    = (shift & 0b00000110) >> 1;

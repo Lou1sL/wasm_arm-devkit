@@ -25,17 +25,21 @@ void print(const char* str){
 void print(const char c){
     print(&c, 1);
 }
-void print(int num, int base = 10){
+void print(size_t num, size_t base = 10){
     int digits = 0;
-    int n = num;
+    size_t n = num;
     do { n /= base; digits++; } while (n != 0);
     int d = digits - 1;
     do{
-        int mod = num % base;
+        size_t mod = num % base;
         if(mod >= 10) scr_io[warm_scr_ptr+d] = 'A' + (mod - 10);
         else scr_io[warm_scr_ptr+d] = '0' + mod;
         num /= base;
         d--;
     }while(num!=0);
     warm_scr_ptr += digits;
+}
+
+void print(long unsigned int num, size_t base = 10){
+    print((size_t)num, base);
 }

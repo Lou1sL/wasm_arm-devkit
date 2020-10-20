@@ -104,7 +104,7 @@ _irq:
     stmfd sp!, {r0, r1}
     stmfd sp!, {r2-r3, r12, lr}
     mov   r0, sp
-    SUB   sp, sp, #(2*4)
+    sub   sp, sp, #(2*4)
 
     msr   cpsr_c, #(IRQ | I)
     stmfd r0!, {r13, r14}
@@ -118,14 +118,14 @@ _irq:
 
     msr   cpsr_c, #(SYS | I | F)
     mov   r0, sp
-    ADD   sp, sp, #(8*4)
+    add   sp, sp, #(8*4)
 
     msr   cpsr_c, #(SYS | I | F)
     mov   sp, r0
     ldr   r0, [sp, #(7*4)]
     msr   spsr_cxsf, r0
 
-    LDMFD sp, {r0-r3, r12, lr}^
+    ldmfd sp, {r0-r3, r12, lr}^
     NOP
     ldr   lr, [sp, #(6*4)]
     movs  pc, lr
