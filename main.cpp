@@ -12,13 +12,18 @@ int main(void){
     });
 
     cpusim->cpu.EXCEP_RST();
+    
+    print("0x"); print(cpusim->cpu.instruction_register, 16); print(" : ");
     cpusim->cpu.Step();
-    print(cpusim->cpu.registers[0]); print("\n");
+    print("r0 is "); print(cpusim->cpu.registers[0]); print("\n");
+
+    print("0x"); print(cpusim->cpu.instruction_register, 16); print(" : ");
     cpusim->cpu.Step();
-    print(cpusim->cpu.registers[0]); print("\n");
+    print("r0 is "); print(cpusim->cpu.registers[0]); print("\n");
+
+    print("0x"); print(cpusim->cpu.instruction_register, 16); print(" : ");
     cpusim->cpu.Step();
-    print(cpusim->cpu.registers[0]); print("\n");
+    print("r0 is "); print(cpusim->cpu.registers[0]); print("\n");
+
     return 0;
 }
-
-//for(var i=0; i<0x20000; i++) if(SIM_memget(i) == 0x69) console.log(i.toString(16))
