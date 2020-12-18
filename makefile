@@ -4,12 +4,12 @@ SRC_DIR = .
 BUILD_DIR = ./build
 COMPILER_DIR = /home/wasm_arm-gcc
 
-CC      = "$(COMPILER_DIR)/bin/arm-none-eabi-g++"
+CXX     = "$(COMPILER_DIR)/bin/arm-none-eabi-g++"
 ASM     = "$(COMPILER_DIR)/bin/arm-none-eabi-as"
 LINK    = "$(COMPILER_DIR)/bin/arm-none-eabi-g++"
 OBJCOPY = "$(COMPILER_DIR)/bin/arm-none-eabi-objcopy"
 
-CCFLAGS = --specs=nosys.specs -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork -ffast-math \
+CXXFLAGS = --specs=nosys.specs -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork -ffast-math \
 	-mlong-calls \
 	-ffunction-sections -fno-omit-frame-pointer -nostdlib \
 	-std=c++17 \
@@ -39,10 +39,10 @@ $(BUILD_DIR)/bootloader.o: $(SRC_DIR)/bootloader.s
 	$(ASM) $(ASMFLAGS) $<
 
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
-	$(CC) $(CCFLAGS) -I$(SRC_DIR) $<
+	$(CXX) $(CXXFLAGS) -I$(SRC_DIR) $<
 
 $(BUILD_DIR)/arm7tdmi.o: $(SRC_DIR)/arm7tdmi/arm7tdmi.cpp
-	$(CC) $(CCFLAGS) -I$(SRC_DIR) $<
+	$(CXX) $(CXXFLAGS) -I$(SRC_DIR) $<
 
 .PHONY: clean
 
