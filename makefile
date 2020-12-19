@@ -4,10 +4,10 @@ SRC_DIR = .
 BUILD_DIR = ./build
 COMPILER_DIR = /home/wasm_arm-gcc
 
-CXX     = "$(COMPILER_DIR)/bin/arm-none-eabi-g++"
-ASM     = "$(COMPILER_DIR)/bin/arm-none-eabi-as"
-LINK    = "$(COMPILER_DIR)/bin/arm-none-eabi-g++"
-OBJCOPY = "$(COMPILER_DIR)/bin/arm-none-eabi-objcopy"
+CXX     = $(COMPILER_DIR)/bin/arm-none-eabi-g++
+ASM     = $(COMPILER_DIR)/bin/arm-none-eabi-as
+LINK    = $(COMPILER_DIR)/bin/arm-none-eabi-g++
+OBJCOPY = $(COMPILER_DIR)/bin/arm-none-eabi-objcopy
 
 CXXFLAGS = --specs=nosys.specs -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork -ffast-math \
 	-mlong-calls \
