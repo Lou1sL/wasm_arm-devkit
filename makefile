@@ -2,7 +2,7 @@
 APP_NAME  = app
 SRC_DIR = .
 BUILD_DIR = ./build
-COMPILER_DIR = /home/wasm_arm-gcc
+COMPILER_DIR = /home/tool/arm-none-eabi-gcc
 
 CXX     = $(COMPILER_DIR)/bin/arm-none-eabi-g++
 ASM     = $(COMPILER_DIR)/bin/arm-none-eabi-as
