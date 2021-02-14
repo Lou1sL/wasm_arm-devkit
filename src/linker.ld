@@ -10,7 +10,7 @@ SECTIONS {
         *bootloader.o (.text)
     .    = ALIGN(0x4);
     } >RAM
-
+    /* https://stackoverflow.com/questions/40532180/understanding-the-linkerscript-for-an-arm-cortex-m-microcontroller */
     .text : {
         CREATE_OBJECT_SYMBOLS
         *(.text .text.* .gnu.linkonce.t.*)

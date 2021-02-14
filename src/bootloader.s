@@ -40,7 +40,7 @@ _rst:
 	stmltia r1!, {r3}
 	blt		1b
 
-	/* .stack coloring
+	/* .stack coloring  
     ldr     r1,  =__stack_start__
     ldr     r2,  =__stack_end__
     ldr     r3,  =STACK_FILL

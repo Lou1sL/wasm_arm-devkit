@@ -1,7 +1,6 @@
+#include "arm7tdmi/arm7tdmi_debug.h"
 
-#include "main.h"
-
-void arm() {
+void ArmTest() {
     ARM7TDMI_DEBUG<1024> *cpusim = new ARM7TDMI_DEBUG<1024>();
     
     cpusim->SetMemory32(0x0,{
@@ -24,11 +23,4 @@ void arm() {
     cpusim->cpu.Step();
     print("r0 is "); print(cpusim->cpu.registers[0]); print("\n");
 
-}
-
-int main(void){
-    
-    int* mlc0 = (int*)malloc(5);
-
-    return 0;
 }
