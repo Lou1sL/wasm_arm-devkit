@@ -31,7 +31,7 @@ LINKER_PATH  = ./src/linker.ld
 
 # Compiling Flags ------------------
 
-CXXFLAGS  = -O3 -std=c++17
+CXXFLAGS  = -O0 -std=c++17
 CXXFLAGS += -mlittle-endian -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork -ffast-math
 CXXFLAGS += -mlong-calls -ffunction-sections -fno-omit-frame-pointer -ffreestanding -fno-unwind-tables -fno-exceptions
 # CXXFLAGS +=  -nostdlib
@@ -42,7 +42,7 @@ CXXFLAGS +=  -c -o $@
 ASMFLAGS  = -mcpu=arm7tdmi -mthumb-interwork
 ASMFLAGS +=  -o $@
 
-LINKFLAGS  = -O3 -std=c++17
+LINKFLAGS  = -O0 -std=c++17
 LINKFLAGS += --specs=nosys.specs
 LINKFLAGS += -T $(LINKER_PATH) -o $(BUILD_DIR)/$(APP_NAME).elf -Wl,-Map,$(BUILD_DIR)/$(APP_NAME).map,--cref -lm
 
