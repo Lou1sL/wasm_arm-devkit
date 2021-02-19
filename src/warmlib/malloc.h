@@ -4,7 +4,6 @@
  * 
  */
 
-
 #include <cinttypes>
 
 constexpr size_t BYTE_ALIGN = 4;

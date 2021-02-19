@@ -1,10 +1,7 @@
+
 #include <cstring>
 #include <cinttypes>
 #include <utility>
-//#include <iostream>
-//#include <sstream>
-
-
 
 volatile uint8_t* const scrout = (uint8_t*)0x01FFFF00;
 size_t const SCR_SIZE = 0x100;

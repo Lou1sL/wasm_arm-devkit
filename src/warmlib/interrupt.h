@@ -1,4 +1,6 @@
 
+#include <cinttypes>
+
 typedef std::uint32_t ARM_CBIT_LOCK;
 static constexpr ARM_CBIT_LOCK ARM_CBIT_SYS_INT_DISABLE = 0b011011111;
 static constexpr ARM_CBIT_LOCK ARM_CBIT_SYS_INT_ENABLE  = 0b000011111;
