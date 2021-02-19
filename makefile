@@ -17,15 +17,19 @@ OBJCOPY = $(COMPILER_DIR)/arm-none-eabi-objcopy
 # Project Settings -----------------
 
 APP_NAME     = app
+
 BUILD_DIR    = ./build
+OUT_DIR      = ./out
 SRC_DIR      = ./src
 INCLUDE_DIR  = ./src
-STARTUP_PATH = ./src/bootloader.s
-LINKER_PATH  = ./src/linker.ld
 
-# SRCS  = $(SRC_DIR)/main.cpp
-# SRCS += $(SRC_DIR)/arm7tdmi/arm7tdmi.cpp
-# OBJS  = $(SRCS:.cpp=.o)
+LNKR  = $(SRC_DIR)/linker.ld
+ASMS  = $(SRC_DIR)/bootloader.s
+SRCS  = $(SRC_DIR)/main.cpp
+SRCS += $(SRC_DIR)/arm7tdmi/arm7tdmi.cpp
+
+ASM_OBJS  = $(ASMS:$(SRC_DIR)/%.s=$(OUT_DIR)/%.o)
+CPP_OBJS  = $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o)
 
 # ----------------------------------
 
@@ -37,38 +41,39 @@ CXXFLAGS += -mlong-calls -ffunction-sections -fno-omit-frame-pointer -ffreestand
 # CXXFLAGS +=  -nostdlib
 CXXFLAGS += --specs=nosys.specs
 CXXFLAGS += -Wall -DNDEBUG
-CXXFLAGS +=  -c -o $@
 
 ASMFLAGS  = -mcpu=arm7tdmi -mthumb-interwork
-ASMFLAGS +=  -o $@
 
 LINKFLAGS  = -O0 -std=c++17
 LINKFLAGS += --specs=nosys.specs
-LINKFLAGS += -T $(LINKER_PATH) -o $(BUILD_DIR)/$(APP_NAME).elf -Wl,-Map,$(BUILD_DIR)/$(APP_NAME).map,--cref -lm
+LINKFLAGS += -T $(LNKR) -o $(BUILD_DIR)/$(APP_NAME).elf -Wl,-Map,$(BUILD_DIR)/$(APP_NAME).map,--cref -lm
 
 # ----------------------------------
 
+.PHONY: all clean
+
 all: $(BUILD_DIR)/$(APP_NAME).elf
 
-$(BUILD_DIR)/$(APP_NAME).elf : $(BUILD_DIR)/bootloader.o $(BUILD_DIR)/main.o $(BUILD_DIR)/arm7tdmi.o
-	$(LINK) $(BUILD_DIR)/bootloader.o $(BUILD_DIR)/main.o $(BUILD_DIR)/arm7tdmi.o $(LINKFLAGS)
+$(BUILD_DIR)/$(APP_NAME).elf : $(CPP_OBJS) $(ASM_OBJS)
+	$(LINK) $(CPP_OBJS) $(ASM_OBJS) $(LINKFLAGS)
 	$(OBJCOPY) -O ihex $(BUILD_DIR)/$(APP_NAME).elf $(BUILD_DIR)/$(APP_NAME).hex
 	$(OBJCOPY) -O binary $(BUILD_DIR)/$(APP_NAME).elf $(BUILD_DIR)/$(APP_NAME).bin
 
-$(BUILD_DIR)/bootloader.o: $(STARTUP_PATH)
-	$(ASM) $(ASMFLAGS) $<
+# $(ASM_OBJS): $(OUT_DIR)/%.o : $(SRC_DIR)/%.s
+$(OUT_DIR)/bootloader.o: $(ASMS)
+	$(ASM) $(ASMFLAGS) -o $@ $<
 
-$(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp
-	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) $<
+$(OUT_DIR)/main.o: $(SRC_DIR)/main.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ -I$(INCLUDE_DIR) $<
 
-$(BUILD_DIR)/arm7tdmi.o: $(SRC_DIR)/arm7tdmi/arm7tdmi.cpp
-	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) $<
+$(OUT_DIR)/arm7tdmi/arm7tdmi.o: $(SRC_DIR)/arm7tdmi/arm7tdmi.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -c -o $@ -I$(INCLUDE_DIR) $<
 
-.PHONY: clean
+
+GARBAGE_TYPES         = *.o *.elf *.map *.bin *.hex
+DIRECTORIES_TO_CLEAN  = $(shell find "./build" "./out" -type d)
+GARBAGE_TYPED_FOLDERS = $(foreach DIR, $(DIRECTORIES_TO_CLEAN), $(addprefix $(DIR)/,$(GARBAGE_TYPES)))
 
 clean:
-	-rm $(BUILD_DIR)/*.o
-	-rm $(BUILD_DIR)/*.elf
-	-rm $(BUILD_DIR)/*.map
-	-rm $(BUILD_DIR)/*.bin
-	-rm $(BUILD_DIR)/*.hex
+	$(RM) -rf $(GARBAGE_TYPED_FOLDERS)
