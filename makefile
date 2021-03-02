@@ -35,7 +35,7 @@ CPP_OBJS  = $(SRCS:$(SRC_DIR)/%.cpp=$(OUT_DIR)/%.o)
 
 # Compiling Flags ------------------
 
-CXXFLAGS  = -O0 -std=c++17
+CXXFLAGS  = -O3 -std=c++17
 CXXFLAGS += -mlittle-endian -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -mthumb-interwork -ffast-math
 CXXFLAGS += -mlong-calls -ffunction-sections -fno-omit-frame-pointer -ffreestanding -fno-unwind-tables -fno-exceptions
 # CXXFLAGS +=  -nostdlib
@@ -44,7 +44,7 @@ CXXFLAGS += -Wall -DNDEBUG
 
 ASMFLAGS  = -mcpu=arm7tdmi -mthumb-interwork
 
-LINKFLAGS  = -O0 -std=c++17
+LINKFLAGS  = -O3 -std=c++17
 LINKFLAGS += --specs=nosys.specs
 LINKFLAGS += -T $(LNKR) -o $(BUILD_DIR)/$(APP_NAME).elf -Wl,-Map,$(BUILD_DIR)/$(APP_NAME).map,--cref -lm
 
