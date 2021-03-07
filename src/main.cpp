@@ -2,7 +2,10 @@
 #include "main.h"
 
 
-int main() {
-
-    return 0;
-} 
+int num = 1;
+int IAmRecursion(int i){
+    return (i <= 100000) ? IAmRecursion(i + num) : i;
+}
+int main(void){
+    return IAmRecursion(0);
+}
