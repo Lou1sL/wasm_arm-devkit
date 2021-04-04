@@ -1,2 +1,2 @@
 @echo off
-docker exec -it mystifying_newton make -C /home/wasm_arm-devkit
+docker run --rm -it -v %cd%:/home/wasm_arm-devkit -w="/home/wasm_arm-devkit" devkitpro/devkitarm make

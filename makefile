@@ -1,7 +1,7 @@
 
 # Envirmental Settings -------------
 
-COMPILER_DIR = /home/tool/arm-none-eabi-gcc/bin
+COMPILER_DIR = /opt/devkitpro/devkitARM/bin
 
 # ----------------------------------
 
@@ -40,7 +40,7 @@ CXXFLAGS += -mlittle-endian -marm -march=armv4t -mcpu=arm7tdmi -mtune=arm7tdmi -
 CXXFLAGS += -mlong-calls -ffunction-sections -fno-omit-frame-pointer -ffreestanding -fno-unwind-tables -fno-exceptions
 # CXXFLAGS +=  -nostdlib
 CXXFLAGS += --specs=nosys.specs
-CXXFLAGS += -Wall -DNDEBUG
+CXXFLAGS += -DNDEBUG -Wno-tautological-compare
 
 ASMFLAGS  = -mcpu=arm7tdmi -mthumb-interwork
 
