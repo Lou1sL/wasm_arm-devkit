@@ -55,15 +55,18 @@ LINKFLAGS += -T $(LNKR) -o $(BUILD_DIR)/$(APP_NAME).elf -Wl,-Map,$(BUILD_DIR)/$(
 all: $(BUILD_DIR)/$(APP_NAME).elf
 
 $(BUILD_DIR)/$(APP_NAME).elf : $(CPP_OBJS) $(ASM_OBJS)
+	@mkdir -p $(@D)
 	$(LINK) $(CPP_OBJS) $(ASM_OBJS) $(LINKFLAGS)
 	$(OBJCOPY) -O ihex $(BUILD_DIR)/$(APP_NAME).elf $(BUILD_DIR)/$(APP_NAME).hex
 	$(OBJCOPY) -O binary $(BUILD_DIR)/$(APP_NAME).elf $(BUILD_DIR)/$(APP_NAME).bin
 
 # $(ASM_OBJS): $(OUT_DIR)/%.o : $(SRC_DIR)/%.s
 $(OUT_DIR)/bootloader.o: $(ASMS)
+	@mkdir -p $(@D)
 	$(ASM) $(ASMFLAGS) -o $@ $<
 
 $(OUT_DIR)/main.o: $(SRC_DIR)/main.cpp
+	@mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ -I$(INCLUDE_DIR) $<
 
 $(OUT_DIR)/arm7tdmi/arm7tdmi.o: $(SRC_DIR)/arm7tdmi/arm7tdmi.cpp
